@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.ibooker.zalarm">
+
+    <!--震动权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--解锁权限-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!--设备重启权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--忽略电量优化-->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--响应闹钟界面-->
+        <activity
+            android:name=".activity.AlarmActivity"
+            android:alwaysRetainTaskState="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--闹钟服务-->
+        <service
+            android:name=".service.AlarmService"
+            android:exported="false"
+            android:process=":alarm_service">
+            <intent-filter android:priority="1000">
+                <action android:name="cc.ibooker.zalarm.alarm_service" />
+            </intent-filter>
+        </service>
+
+        <!--远程服务-->
+        <service
+            android:name=".service.RemoteService"
+            android:exported="false"
+            android:process=":remote_service">
+            <intent-filter android:priority="1000">
+                <action android:name="cc.ibooker.zalarm.remote_service" />
+            </intent-filter>
+        </service>
+
+        <!--Android 5.0 JobScheduler-->
+        <service
+            android:name=".service.JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!--闹钟接收广播-->
+        <receiver
+            android:name=".receiver.AlarmReceiver"
+            android:process=":alarm_service" />
+
+        <!--Widget闹钟小组件-->
+        <receiver android:name=".widget.AlarmWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/alarm_widget_info" />
+        </receiver>
+
+    </application>
+
+</manifest>

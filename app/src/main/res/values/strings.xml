@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ZAlarm</string>
+
+    <string name="appwidget_text">倒计时</string>
+</resources>
