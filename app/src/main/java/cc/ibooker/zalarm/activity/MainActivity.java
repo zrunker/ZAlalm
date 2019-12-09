@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -24,9 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.ibooker.zalarm.R;
-import cc.ibooker.zalarm.service.AlarmService;
 import cc.ibooker.zalarm.service.JobSchedulerService;
-import cc.ibooker.zalarm.service.RemoteService;
+import cc.ibooker.zalarm.service.ServiceManager;
 import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
 
 /**
@@ -43,6 +43,8 @@ import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
  * 3、Android 5.0 JobScheduler，Android 6.0 Doze模式。
  * <p>
  * 4、AppWidget小组件开发，定义倒计时小组件，在小组件中启动闹钟服务。
+ * <p>
+ * 5、对一些系统广播监听
  *
  * @author 邹峰立
  */
@@ -88,61 +90,41 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 小时
                 String hourStr = hourEd.getText().toString().trim();
-                int hour = Integer.parseInt(hourStr);
-                if (hour >= 0 && hour <= 24) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("hour", hour);
-                    SharedpreferencesUtil.getIntance().saveSharedPreferences(MainActivity.this, "StudyRemindSetting", MODE_APPEND, map);
+                if (!TextUtils.isEmpty(hourStr)) {
+                    int hour = Integer.parseInt(hourStr);
+                    if (hour >= 0 && hour <= 24) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("hour", hour);
+                        SharedpreferencesUtil.getIntance().saveSharedPreferences(MainActivity.this, "StudyRemindSetting", MODE_APPEND, map);
 
 
-                    // 分钟
-                    String minuteStr = minuteEd.getText().toString().trim();
-                    int minute = Integer.parseInt(minuteStr);
-                    if (minute >= 0 && minute <= 60) {
-                        Map<String, Object> map1 = new HashMap<>();
-                        map1.put("minute", minute);
-                        SharedpreferencesUtil.getIntance().saveSharedPreferences(MainActivity.this, "StudyRemindSetting", MODE_APPEND, map1);
+                        // 分钟
+                        String minuteStr = minuteEd.getText().toString().trim();
+                        int minute = Integer.parseInt(minuteStr);
+                        if (minute >= 0 && minute <= 60) {
+                            Map<String, Object> map1 = new HashMap<>();
+                            map1.put("minute", minute);
+                            SharedpreferencesUtil.getIntance().saveSharedPreferences(MainActivity.this, "StudyRemindSetting", MODE_APPEND, map1);
 
 
-                        // 开启闹钟服务
-                        startAlarmService();
-                        // 开启远程服务
-                        startRemoteService();
+                            // 开启闹钟服务
+                            ServiceManager.startAlarmService(MainActivity.this);
+                            // 开启远程服务
+                            ServiceManager.startRemoteService(MainActivity.this);
 
 
-                        // 初始化控件
-                        hourEd.setText("");
-                        minuteEd.setText("");
-//                        tBtn.setChecked(false);
+                            // 初始化控件
+                            hourEd.setText("");
+                            minuteEd.setText("");
+                        } else {
+                            Toast.makeText(MainActivity.this, "分钟只能填写0~60", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(MainActivity.this, "分钟只能填写0~60", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "小时只能填写0~24", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(MainActivity.this, "小时只能填写0~24", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    /**
-     * 开启闹钟服务
-     */
-    private void startAlarmService() {
-        Intent intentAlarm = new Intent(this, AlarmService.class);
-        intentAlarm.setAction("cc.ibooker.zalarm.alarm_service");
-        intentAlarm.putExtra("isOpenStartForeground", true);
-        intentAlarm.putExtra("isUpdateAlarmCalendar", true);
-        intentAlarm.putExtra("alarmType", AlarmService.TYPE_ONE_DAY);
-        startService(intentAlarm);
-    }
-
-    /**
-     * 开启远程服务
-     */
-    private void startRemoteService() {
-        Intent intentRemote = new Intent(this, RemoteService.class);
-        intentRemote.setAction("cc.ibooker.zalarm.remote_service");
-        startService(intentRemote);
     }
 
     /**

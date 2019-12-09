@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cc.ibooker.zalarm">
 
     <!--震动权限-->
@@ -13,13 +14,20 @@
     <!--忽略电量优化-->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!--接收开机广播-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,6 +75,11 @@
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:process=":alarm_service" />
+
+        <!--系统广播监听-->
+        <receiver
+            android:name=".receiver.SysBroadcastReceiver"
+            android:process=":sys_receive" />
 
         <!--Widget闹钟小组件-->
         <receiver android:name=".widget.AlarmWidget">
