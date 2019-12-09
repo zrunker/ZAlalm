@@ -44,7 +44,7 @@ import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
  * <p>
  * 4、AppWidget小组件开发，定义倒计时小组件，在小组件中启动闹钟服务。
  * <p>
- * 5、对一些系统广播监听
+ * 5、对一些系统广播监听（开机、锁屏、安装更新APP...）
  *
  * @author 邹峰立
  */
