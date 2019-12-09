@@ -1,5 +1,5 @@
 # ZAlalm
-闹钟实例，1、杀不死的Service。2、双进程保护Aidl。3、Android 5.0 JobScheduler和Android 6.0 Doze模式。4、AppWidget小组件。
+闹钟实例，1、杀不死的Service。2、双进程保护Aidl。3、Android 5.0 JobScheduler和Android 6.0 Doze模式。4、AppWidget小组件。5、对一些系统广播监听（开机、锁屏、安装更新APP...）。
 
 /**
  * Android 闹钟实例：
@@ -15,6 +15,8 @@
  * 3、Android 5.0 JobScheduler，Android 6.0 Doze模式。
  * <p>
  * 4、AppWidget小组件开发，定义倒计时小组件，在小组件中启动闹钟服务。
+ * <p>
+ * 5、对一些系统广播监听（开机、锁屏、安装更新APP...）
  *
  * @author 邹峰立
  */
