@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ServiceManager.unregisterReceiver(this);
+        ServiceManager.getInstance().unregisterReceiver(this);
     }
 
     // 初始化控件
@@ -114,12 +114,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                             // 开启闹钟服务
-                            ServiceManager.startAlarmService(MainActivity.this);
+                            ServiceManager.getInstance().startAlarmService(MainActivity.this);
                             // 开启远程服务
-                            ServiceManager.startRemoteService(MainActivity.this);
+                            ServiceManager.getInstance().startRemoteService(MainActivity.this);
 
                             // 注册广播
-                            ServiceManager.registerReceiver(MainActivity.this);
+                            ServiceManager.getInstance().registerReceiver(MainActivity.this);
 
                             // 初始化控件
                             hourEd.setText("");
@@ -143,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
             JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
             JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
 
-            builder.setPeriodic(60 * 1000); // 每隔60秒运行一次
-            builder.setRequiresCharging(true);
-
+            // 每隔60秒运行一次
+            builder.setPeriodic(60 * 1000);// 大于15分钟
+//            builder.setMinimumLatency(60 * 1000);// 小于15分钟的设置方案
+//            builder.setOverrideDeadline(60 * 1000);// 执行的最长延时时间
+            builder.setRequiresCharging(true);// 当插入充电器，执行该任务
             builder.setPersisted(true);  // 设置设备重启后，是否重新执行任务
             builder.setRequiresDeviceIdle(true);
 

@@ -24,9 +24,9 @@ public class SysBroadcastReceiver extends BroadcastReceiver {
             lock = true;
             if (intent != null) {
                 // 开启闹钟服务
-                ServiceManager.startAlarmService(context);
+                ServiceManager.getInstance().startAlarmService(context);
                 // 开启远程服务
-                ServiceManager.startRemoteService(context);
+                ServiceManager.getInstance().startRemoteService(context);
             }
             lock = false;
         }

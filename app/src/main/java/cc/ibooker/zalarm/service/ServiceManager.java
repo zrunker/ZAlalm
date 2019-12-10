@@ -14,14 +14,23 @@ import cc.ibooker.zalarm.receiver.SysBroadcastReceiver;
  * @author 邹峰立
  */
 public class ServiceManager {
-    private static SysBroadcastReceiver sysBroadcastReceiver;
+    private static ServiceManager serviceManager;
+    private SysBroadcastReceiver sysBroadcastReceiver;
+
+    public static ServiceManager getInstance() {
+        if (serviceManager == null)
+            synchronized (ServiceManager.class) {
+                serviceManager = new ServiceManager();
+            }
+        return serviceManager;
+    }
 
     /**
      * 注册广播
      *
      * @param context 上下文对象
      */
-    public synchronized static void registerReceiver(Context context) {
+    public void registerReceiver(Context context) {
         // 开启系统广播
         if (sysBroadcastReceiver == null) {
             sysBroadcastReceiver = new SysBroadcastReceiver();
@@ -53,7 +62,7 @@ public class ServiceManager {
      *
      * @param context 上下文对象
      */
-    public synchronized static void unregisterReceiver(Context context) {
+    public void unregisterReceiver(Context context) {
         if (sysBroadcastReceiver != null) {
             Context appContext = context.getApplicationContext();
             appContext.unregisterReceiver(sysBroadcastReceiver);
@@ -64,23 +73,23 @@ public class ServiceManager {
     /**
      * 开启闹钟服务
      */
-    public static void startAlarmService(Context context) {
-        Context appContext = context.getApplicationContext();
-        Intent intentAlarm = new Intent(appContext, AlarmService.class);
+    public void startAlarmService(Context context) {
+//        Context appContext = context.getApplicationContext();
+        Intent intentAlarm = new Intent(context, AlarmService.class);
         intentAlarm.setAction("cc.ibooker.zalarm.alarm_service");
         intentAlarm.putExtra("isOpenStartForeground", true);
         intentAlarm.putExtra("isUpdateAlarmCalendar", true);
         intentAlarm.putExtra("alarmType", AlarmService.TYPE_ONE_DAY);
-        appContext.startService(intentAlarm);
+        context.startService(intentAlarm);
     }
 
     /**
      * 开启远程服务
      */
-    public static void startRemoteService(Context context) {
-        Context appContext = context.getApplicationContext();
-        Intent intentRemote = new Intent(appContext, RemoteService.class);
+    public void startRemoteService(Context context) {
+//        Context appContext = context.getApplicationContext();
+        Intent intentRemote = new Intent(context, RemoteService.class);
         intentRemote.setAction("cc.ibooker.zalarm.remote_service");
-        appContext.startService(intentRemote);
+        context.startService(intentRemote);
     }
 }

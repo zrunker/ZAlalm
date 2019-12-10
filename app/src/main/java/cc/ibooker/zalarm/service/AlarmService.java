@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -91,11 +92,14 @@ public class AlarmService extends Service {
     // Service服务启动，可能执行多次
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("AlarmService:", "onStartCommand");
         if (isCreate) {
+            Log.d("AlarmService:", "isCreate + 1 " + isCreate);
             // 判断是否需要开启提醒
             Map<String, ?> map = SharedpreferencesUtil.getIntance().readSharedPreferences(this, "StudyRemindSetting", MODE_APPEND);
             isOpenAlarmRemind = Boolean.parseBoolean(map.get("isOpenAlarmRemind").toString());
             if (isOpenAlarmRemind) {// 开启服务提醒
+                Log.d("AlarmService:", "isOpenAlarmRemind + 2 " + isOpenAlarmRemind);
                 // 绑定远程服务
                 bindRemoteService();
 
@@ -113,6 +117,7 @@ public class AlarmService extends Service {
 
                 // 更新闹钟时间
                 if (isUpdateAlarmCalendar) {
+                    Log.d("AlarmService:", "isUpdateAlarmCalendar + 3 " + isUpdateAlarmCalendar);
                     int alarmType = intent.getIntExtra("alarmType", -1);
                     // 获取时分
                     int hour = -1;

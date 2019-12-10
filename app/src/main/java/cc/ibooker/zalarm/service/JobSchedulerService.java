@@ -32,6 +32,7 @@ public class JobSchedulerService extends JobService {
 
         @Override
         public void handleMessage(Message msg) {
+            Log.d("JobSchedulerService:", "JobSchedulerService");
             // 开启闹钟服务
             Intent intent = new Intent(mWeakRef.get(), AlarmService.class);
             intent.setAction("cc.ibooker.zalarm.alarm_service");
