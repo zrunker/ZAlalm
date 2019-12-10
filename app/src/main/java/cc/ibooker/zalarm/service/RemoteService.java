@@ -96,7 +96,6 @@ public class RemoteService extends Service {
             if (isOpenAlarmRemind) {
                 // 绑定闹钟服务
                 bindAlarmService();
-                return startArgFlags;
             }
         }
         return super.onStartCommand(intent, startArgFlags, startId);
