@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import cc.ibooker.zalarm.activity.LiveActivityManager;
 import cc.ibooker.zalarm.service.ServiceManager;
 
 /**
@@ -27,6 +28,13 @@ public class SysBroadcastReceiver extends BroadcastReceiver {
                 ServiceManager.getInstance().startAlarmService(context);
                 // 开启远程服务
                 ServiceManager.getInstance().startRemoteService(context);
+
+                String action = intent.getAction();
+                if (Intent.ACTION_SCREEN_ON.equals(action)) {// 开屏
+                    LiveActivityManager.getInstance(context).finishActivity();
+                } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {// 锁屏
+                    LiveActivityManager.getInstance(context).startActivity();
+                }
             }
             lock = false;
         }

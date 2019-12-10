@@ -2,6 +2,8 @@ package cc.ibooker.zalarm.service;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -26,7 +28,6 @@ import java.util.TimerTask;
 
 import cc.ibooker.zalarm.IAlarmAidlInterface;
 import cc.ibooker.zalarm.R;
-import cc.ibooker.zalarm.activity.MainActivity;
 import cc.ibooker.zalarm.receiver.AlarmReceiver;
 import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
 import cc.ibooker.zalarm.widget.AlarmWidget;
@@ -112,9 +113,9 @@ public class AlarmService extends Service {
                 // 开启前置服务
                 if (isOpenStartForeground) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                        startForeground(1111, getNotificationBuilder().build());
+                        startForeground(111112, getNotificationBuilder().build());
                     else
-                        startForeground(1111, new Notification());
+                        startForeground(111112, new Notification());
                 } else {
                     stopForeground(true);
                 }
@@ -343,12 +344,27 @@ public class AlarmService extends Service {
 
     // 获取Notification.Builder
     public Notification.Builder getNotificationBuilder() {
-        Intent intent = new Intent(this, MainActivity.class);
-        return new Notification.Builder(getApplicationContext())
+        Intent intent = new Intent();
+        Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))// 设置PendingIntent
                 .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
-                .setContentTitle(getResources().getString(R.string.app_name))
+//                .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText("闹钟服务") // 设置上下文内容
                 .setWhen(System.currentTimeMillis());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String CHANNEL_ONE_ID = "321";
+            String CHANNEL_ONE_NAME = "闹钟服务";
+            // 修改安卓8.1以上系统报错
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ONE_ID, CHANNEL_ONE_NAME, NotificationManager.IMPORTANCE_MIN);
+            notificationChannel.enableLights(false);//如果使用中的设备支持通知灯，则说明此通知通道是否应显示灯
+            notificationChannel.setShowBadge(false);//是否显示角标
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+            builder.setChannelId(CHANNEL_ONE_ID);
+        }
+        return builder;
     }
 }

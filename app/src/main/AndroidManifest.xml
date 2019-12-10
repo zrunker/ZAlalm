@@ -96,6 +96,11 @@
                 android:resource="@xml/alarm_widget_info" />
         </receiver>
 
+        <!--1像素Activity-->
+        <activity
+            android:name=".activity.LiveActivity"
+            android:theme="@style/LiveStyle" />
+
     </application>
 
 </manifest>

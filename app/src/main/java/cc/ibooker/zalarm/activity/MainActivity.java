@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ServiceManager.getInstance().unregisterReceiver(this);
+//        ServiceManager.getInstance().unregisterReceiver(this);
     }
 
     // 初始化控件
