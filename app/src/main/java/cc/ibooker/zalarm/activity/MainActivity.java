@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 开启JobSchedulerService，监听关机重启
+     * 开启JobSchedulerService，1分钟执行一次
      */
     private void startJobSchedulerService() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
