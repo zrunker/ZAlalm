@@ -105,6 +105,14 @@ public class AlarmService extends Service {
         }
     }
 
+    // 取消广播
+    private void unregisterReceiver() {
+        if (sysBroadcastReceiver != null) {
+            unregisterReceiver(sysBroadcastReceiver);
+            sysBroadcastReceiver = null;
+        }
+    }
+
     // 初始化
     private void init() {
         // 保证内存不足，杀死会重新创建
@@ -253,7 +261,7 @@ public class AlarmService extends Service {
         timer = null;
 
         // 取消广播
-        unregisterReceiver(sysBroadcastReceiver);
+        unregisterReceiver();
 
         // 关闭前置服务
         isOpenStartForeground = false;
@@ -273,6 +281,9 @@ public class AlarmService extends Service {
         super.onDestroy();
         // 销毁定时器
         timer = null;
+
+        // 取消广播
+        unregisterReceiver();
 
         if (isOpenAlarmRemind) {
             // 启动自身
