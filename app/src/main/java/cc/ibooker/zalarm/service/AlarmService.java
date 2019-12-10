@@ -135,7 +135,7 @@ public class AlarmService extends Service {
                             break;
                     }
 
-                    updateAlram(hour, minute, alarmType);
+                    updateAlarm(hour, minute, alarmType);
                 }
             } else {// 关闭闹钟服务
                 closeAlarm();
@@ -151,7 +151,7 @@ public class AlarmService extends Service {
      * @param minute 分
      * @param type   类型
      */
-    private void updateAlram(int hour, int minute, int type) {
+    private void updateAlarm(int hour, int minute, int type) {
         if (hour >= 0 && minute >= 0 && alarmManager != null) {
             // 取消闹钟
             alarmManager.cancel(sender);
@@ -316,10 +316,7 @@ public class AlarmService extends Service {
     private void bindRemoteService() {
         Intent intent = new Intent(this, RemoteService.class);
         intent.setAction("cc.ibooker.zalarm.remote_service");
-        bindService(
-                intent,
-                conn,
-                Context.BIND_IMPORTANT);
+        bindService(intent, conn, Context.BIND_IMPORTANT);
     }
 
     /**
