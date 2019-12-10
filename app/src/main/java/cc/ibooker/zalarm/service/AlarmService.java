@@ -12,7 +12,6 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -69,7 +68,6 @@ public class AlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("AlarmService", "onCreate");
         isCreate = true;
         init();
     }
@@ -93,24 +91,19 @@ public class AlarmService extends Service {
     // Service服务启动，可能执行多次
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("AlarmService", "onStartCommand");
         if (isCreate) {
             // 判断是否需要开启提醒
             Map<String, ?> map = SharedpreferencesUtil.getIntance().readSharedPreferences(this, "StudyRemindSetting", MODE_APPEND);
             isOpenAlarmRemind = Boolean.parseBoolean(map.get("isOpenAlarmRemind").toString());
-            Log.d("AlarmService", "isOpenAlarmRemind = " + isOpenAlarmRemind);
             if (isOpenAlarmRemind) {// 开启服务提醒
                 // 绑定远程服务
                 bindRemoteService();
 
-                Log.d("AlarmService", "isCreate = " + isCreate);
                 boolean isUpdateAlarmCalendar = false;// 标记是否需要更新闹钟时间
                 if (intent != null) {
                     isOpenStartForeground = intent.getBooleanExtra("isOpenStartForeground", true);
                     isUpdateAlarmCalendar = intent.getBooleanExtra("isUpdateAlarmCalendar", false);
                 }
-                Log.d("AlarmService", "isOpenStartForeground = " + isOpenStartForeground);
-                Log.d("AlarmService", "isUpdateAlarmCalendar = " + isUpdateAlarmCalendar);
                 // 开启前置服务
                 if (isOpenStartForeground) {
                     startForeground(111, new Notification());

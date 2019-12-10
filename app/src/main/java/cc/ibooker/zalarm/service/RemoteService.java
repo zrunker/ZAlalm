@@ -88,7 +88,6 @@ public class RemoteService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("RemoteService", "onStartCommand");
         if (isCreate) {
             // 判断是否需要开启提醒
             Map<String, ?> map = SharedpreferencesUtil.getIntance().readSharedPreferences(this, "StudyRemindSetting", MODE_APPEND);
@@ -99,7 +98,7 @@ public class RemoteService extends Service {
                 bindAlarmService();
             }
         }
-        return super.onStartCommand(intent, startArgFlags, startId);
+        return startArgFlags;
     }
 
     @Override
