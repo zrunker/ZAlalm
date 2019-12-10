@@ -26,6 +26,7 @@ import java.util.TimerTask;
 
 import cc.ibooker.zalarm.IAlarmAidlInterface;
 import cc.ibooker.zalarm.R;
+import cc.ibooker.zalarm.activity.MainActivity;
 import cc.ibooker.zalarm.receiver.AlarmReceiver;
 import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
 import cc.ibooker.zalarm.widget.AlarmWidget;
@@ -110,11 +111,15 @@ public class AlarmService extends Service {
                 }
                 // 开启前置服务
                 if (isOpenStartForeground) {
-                    startForeground(1111, new Notification());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                        startForeground(1111, getNotificationBuilder().build());
+                    else
+                        startForeground(1111, new Notification());
                 } else {
                     stopForeground(true);
                 }
 
+                Log.d("AlarmService:", "isUpdateAlarmCalendar + 3 " + isUpdateAlarmCalendar);
                 // 更新闹钟时间
                 if (isUpdateAlarmCalendar) {
                     Log.d("AlarmService:", "isUpdateAlarmCalendar + 3 " + isUpdateAlarmCalendar);
@@ -187,6 +192,7 @@ public class AlarmService extends Service {
                     break;
             }
 
+            Log.d("AlarmWidget:", "AlarmWidget");
             // 开启定时器 - 一分钟更新一次Widget
             if (timer == null)
                 timer = new Timer();
@@ -257,6 +263,7 @@ public class AlarmService extends Service {
      * @param widgetText Widget显示内容
      */
     private void updateWidget(String widgetText) {
+        Log.d("AlarmWidget:", widgetText);
         if (remoteViews == null)
             remoteViews = new RemoteViews(getPackageName(), R.layout.alarm_widget);
         remoteViews.setTextViewText(R.id.appwidget_text, widgetText);
@@ -332,5 +339,15 @@ public class AlarmService extends Service {
     private void unBindRemoteService() {
         if (isOpenAlarmRemind)
             unbindService(conn);
+    }
+
+    public Notification.Builder getNotificationBuilder() {
+        Intent intent = new Intent(this, MainActivity.class);
+        return new Notification.Builder(getApplicationContext())
+                .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))// 设置PendingIntent
+                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
+                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentText("闹钟服务") // 设置上下文内容
+                .setWhen(System.currentTimeMillis());
     }
 }
