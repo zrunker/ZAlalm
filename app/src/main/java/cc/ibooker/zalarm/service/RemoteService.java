@@ -97,6 +97,8 @@ public class RemoteService extends Service {
                 startForeground(1112, new Notification());
                 // 绑定闹钟服务
                 bindAlarmService();
+            } else {
+                stopForeground(true);
             }
         }
         return super.onStartCommand(intent, startArgFlags, startId);
