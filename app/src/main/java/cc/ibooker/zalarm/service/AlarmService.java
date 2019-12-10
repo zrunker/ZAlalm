@@ -106,7 +106,7 @@ public class AlarmService extends Service {
                 }
                 // 开启前置服务
                 if (isOpenStartForeground) {
-                    startForeground(111, new Notification());
+                    startForeground(1111, new Notification());
                 } else {
                     stopForeground(true);
                 }

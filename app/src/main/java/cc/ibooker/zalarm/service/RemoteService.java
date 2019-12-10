@@ -1,5 +1,6 @@
 package cc.ibooker.zalarm.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -93,6 +94,7 @@ public class RemoteService extends Service {
             isOpenAlarmRemind = Boolean.parseBoolean(map.get("isOpenAlarmRemind").toString());
 
             if (isOpenAlarmRemind) {
+                startForeground(1112, new Notification());
                 // 绑定闹钟服务
                 bindAlarmService();
             }
