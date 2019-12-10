@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import java.util.Map;
 
@@ -101,7 +102,7 @@ public class RemoteService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-//            Toast.makeText(RemoteService.this, "远程服务", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RemoteService.this, "远程服务", Toast.LENGTH_SHORT).show();
         }
 
         @Override

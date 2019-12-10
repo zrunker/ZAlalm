@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServiceManager.unregisterReceiver(this);
+    }
+
     // 初始化控件
     private void initView() {
         hourEd = findViewById(R.id.ed_hour);
@@ -112,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                             // 开启远程服务
                             ServiceManager.startRemoteService(MainActivity.this);
 
+                            // 注册广播
+                            ServiceManager.registerReceiver(MainActivity.this);
 
                             // 初始化控件
                             hourEd.setText("");
