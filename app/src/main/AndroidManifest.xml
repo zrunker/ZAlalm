@@ -79,7 +79,7 @@
         <!--系统广播监听-->
         <receiver
             android:name=".receiver.SysBroadcastReceiver"
-            android:process=":sys_receive" />
+            android:process=":alarm_service" />
 
         <!--Widget闹钟小组件-->
         <receiver android:name=".widget.AlarmWidget">
