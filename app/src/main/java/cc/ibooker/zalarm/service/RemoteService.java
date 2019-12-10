@@ -11,7 +11,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.Map;
 
@@ -161,9 +160,6 @@ public class RemoteService extends Service {
     private void bindAlarmService() {
         Intent intent = new Intent(this, AlarmService.class);
         intent.setAction("cc.ibooker.zalarm.alarm_service");
-        bindService(
-                intent,
-                conn,
-                Context.BIND_IMPORTANT);
+        bindService(intent, conn, Context.BIND_IMPORTANT);
     }
 }
