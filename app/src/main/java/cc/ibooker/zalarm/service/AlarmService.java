@@ -341,6 +341,7 @@ public class AlarmService extends Service {
             unbindService(conn);
     }
 
+    // 获取Notification.Builder
     public Notification.Builder getNotificationBuilder() {
         Intent intent = new Intent(this, MainActivity.class);
         return new Notification.Builder(getApplicationContext())

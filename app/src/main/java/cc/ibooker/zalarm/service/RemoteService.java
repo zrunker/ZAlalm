@@ -1,6 +1,7 @@
 package cc.ibooker.zalarm.service;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import java.util.Map;
 
 import cc.ibooker.zalarm.IAlarmAidlInterface;
+import cc.ibooker.zalarm.R;
+import cc.ibooker.zalarm.activity.MainActivity;
 import cc.ibooker.zalarm.sharedpreferences.SharedpreferencesUtil;
 
 /**
@@ -63,7 +66,10 @@ public class RemoteService extends Service {
             isOpenAlarmRemind = Boolean.parseBoolean(map.get("isOpenAlarmRemind").toString());
 
             if (isOpenAlarmRemind) {
-                startForeground(1112, new Notification());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    startForeground(1111, getNotificationBuilder().build());
+                else
+                    startForeground(1111, new Notification());
                 // 绑定闹钟服务
                 bindAlarmService();
             } else {
@@ -135,5 +141,16 @@ public class RemoteService extends Service {
         Intent intent = new Intent(this, AlarmService.class);
         intent.setAction("cc.ibooker.zalarm.alarm_service");
         bindService(intent, conn, Context.BIND_IMPORTANT);
+    }
+
+    // 获取Notification.Builder
+    public Notification.Builder getNotificationBuilder() {
+        Intent intent = new Intent(this, MainActivity.class);
+        return new Notification.Builder(getApplicationContext())
+                .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))// 设置PendingIntent
+                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
+                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentText("闹钟服务") // 设置上下文内容
+                .setWhen(System.currentTimeMillis());
     }
 }
