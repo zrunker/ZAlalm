@@ -144,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
             JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
 
             // 每隔60秒运行一次
-            builder.setPeriodic(60 * 1000);// 大于15分钟
-//            builder.setMinimumLatency(60 * 1000);// 小于15分钟的设置方案
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                builder.setMinimumLatency(60 * 1000);// 小于15分钟的设置方案
+            else
+                builder.setPeriodic(60 * 1000);// 大于15分钟
 //            builder.setOverrideDeadline(60 * 1000);// 执行的最长延时时间
             builder.setRequiresCharging(true);// 当插入充电器，执行该任务
             builder.setPersisted(true);  // 设置设备重启后，是否重新执行任务
