@@ -98,8 +98,14 @@
 
         <!--1像素Activity-->
         <activity
-            android:name=".activity.LiveActivity"
-            android:theme="@style/LiveStyle" />
+            android:name=".activity.OnePiexlActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance"
+            android:process=":alarm_service"
+            android:theme="@style/OnePiexlStyle" />
 
     </application>
 

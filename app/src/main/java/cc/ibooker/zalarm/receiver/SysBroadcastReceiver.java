@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import cc.ibooker.zalarm.activity.LiveActivityManager;
+import cc.ibooker.zalarm.activity.OnePiexlActivity;
 import cc.ibooker.zalarm.service.ServiceManager;
 
 /**
@@ -31,9 +31,18 @@ public class SysBroadcastReceiver extends BroadcastReceiver {
 
                 String action = intent.getAction();
                 if (Intent.ACTION_SCREEN_ON.equals(action)) {// 开屏
-                    LiveActivityManager.getInstance(context).finishActivity();
+                    // 关闭1像素Activity
+                    context.sendBroadcast(new Intent("finishOnePiexlActivity"));
+                    // 进入首页
+                    Intent main = new Intent(Intent.ACTION_MAIN);
+                    main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    main.addCategory(Intent.CATEGORY_HOME);
+                    context.startActivity(main);
                 } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {// 锁屏
-                    LiveActivityManager.getInstance(context).startActivity();
+                    // 开启1像素Activity
+                    Intent intentOnePiexl = new Intent(context, OnePiexlActivity.class);
+                    intentOnePiexl.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intentOnePiexl);
                 }
             }
             lock = false;
